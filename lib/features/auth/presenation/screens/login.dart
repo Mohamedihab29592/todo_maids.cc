@@ -31,8 +31,24 @@ class LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<LoginCubit, LoginStates>(
           listener: (context, state) {
             if (state is LoginSuccessState) {
-              GoRouter.of(context).go(
-                AppRouter.kLayout,
+              GoRouter.of(context).go(AppRouter.kLayout);
+            } else if (state is LoginErrorState) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Login Error'),
+                    content: Text(state.error),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
             }
           },
@@ -73,27 +89,29 @@ class LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 MyFormField(
-                                    textCapitalization: TextCapitalization.none,
-                                    maxLines: 1,
-                                    controller: _usernameController,
-                                    type: TextInputType.text,
-                                    hint: AppStrings.userName,
-                                    hintStyle: TextStyle(color: Colors.grey[400]),
-                                    validation: (value) {
-                                      if (value.isEmpty) {
-                                        return AppStrings.userNameValidate;
-                                      }
-                                      return null;
+                                  textCapitalization: TextCapitalization.none,
+                                  maxLines: 1,
+                                  controller: _usernameController,
+                                  type: TextInputType.text,
+                                  hint: AppStrings.userName,
+                                  hintStyle: TextStyle(color: Colors.grey[400]),
+                                  validation: (value) {
+                                    if (value.isEmpty) {
+                                      return AppStrings.userNameValidate;
                                     }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                 MyFormField(
                                   maxLines: 1,
                                   textCapitalization: TextCapitalization.none,
                                   suffixIcon: LoginCubit.of(context).suffix,
-                                  isPassword: LoginCubit.of(context).isPasswordVisible,
+                                  isPassword:
+                                      LoginCubit.of(context).isPasswordVisible,
                                   suffixIconPressed: () {
-                                    LoginCubit.of(context).togglePasswordVisibility();
+                                    LoginCubit.of(context)
+                                        .togglePasswordVisibility();
                                   },
                                   controller: _passwordController,
                                   type: TextInputType.text,
@@ -148,6 +166,5 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-
   }
 }

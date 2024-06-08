@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../helper/cache_helper.dart';
+import 'package:todo_task/core/utilies/strings.dart';
+import '../error/exceptions.dart';
 import '../utilies/constans.dart';
-CacheHelper cacheHelper = CacheHelper();
 
 class DioHelper {
   static final DioHelper _instance = DioHelper._internal();
@@ -12,7 +12,6 @@ class DioHelper {
   }
 
   static Dio? _dio;
-  static CacheHelper cacheHelper = CacheHelper();
 
   DioHelper._internal() {
     BaseOptions baseOptions = BaseOptions(
@@ -33,93 +32,52 @@ class DioHelper {
 
   static Future<Response> postData({
     required String url,
-    required data,
+    required dynamic data,
   }) async {
     try {
-      Response response = await _dio!.post(url, data: data,);
+      Response response = await _dio!.post(url, data: data);
       return response;
     } catch (e) {
-      // Print stack trace to get more information about the error
-
       if (e is DioException) {
-        // If DioError, it means an HTTP error occurred
+        // Handle DioException which is usually related to HTTP errors
         if (e.response != null) {
-          // There is a response with data, debugPrint it for analysis
           debugPrint('Response data: ${e.response!.data}');
+          debugPrint('Status code: ${e.response!.statusCode}');
+
+          // Check for specific status codes
+          switch (e.response!.statusCode) {
+            case 400:
+            // Invalid credentials
+              throw InvalidCredentialsException(e.response!.data['message']);
+            case 401:
+            // Unauthorized
+              throw InvalidCredentialsException(AppStrings.errorUnauthorized);
+            case 403:
+            // Forbidden
+              throw ServerException(AppStrings.errorForbidden);
+            case 404:
+            // Not found
+              throw ServerException(AppStrings.errorResource);
+            case 500:
+            // Internal server error
+              throw ServerException(AppStrings.errorInternal);
+            default:
+            // Other server errors
+              throw ServerException(
+                  'Server error: ${e.response!.statusCode} ${e.response!.statusMessage}');
+          }
         } else {
-          // No response available, debugPrint the error message
-          debugPrint('Error message: ${e.message}');
+          // No response from server, it's a network issue
+          debugPrint('Network error: ${e.message}');
+          throw NetworkException(AppStrings.errorNetwork);
         }
-        // Throw the DioError to handle it in the caller function if needed
-        rethrow;
       } else {
-        // Other types of errors
-        debugPrint('Error: $e');
-        rethrow;
+        // Other types of errors, rethrow or handle specifically
+        debugPrint('Unexpected error: $e');
+        throw ServerException('Unexpected error: $e');
       }
     }
   }
 
-
-  static Future<Response> patchData({
-    required String url,
-    required data,
-  }) async {
-    try {
-      String? token = await cacheHelper.readToken();
-      _dio!.options.headers = {
-        'Authorization': 'Bearer $token',
-      };
-      Response response = await _dio!.patch(url, data: data);
-      return response;
-    } catch (e) {
-      if (e is DioException) {
-        // If DioError, it means an HTTP error occurred
-        if (e.response != null) {
-          // There is a response with data, debugPrint it for analysis
-          debugPrint('Response data: ${e.response!.data}');
-        } else {
-          // No response available, debugPrint the error message
-          debugPrint('Error message: ${e.message}');
-        }
-        // Throw the DioError to handle it in the caller function if needed
-        rethrow;
-      } else {
-        // Other types of errors
-        debugPrint('Error: $e');
-        rethrow;
-      }
-    }
-  }
-
-  static Future<Response> getData({
-    required String url,
-  }) async {
-    try {
-      String ? token = await cacheHelper.readToken();
-      _dio!.options.headers = {
-        'Authorization': 'Bearer $token',
-      };
-      Response response = await _dio!.get(url);
-      return response;
-    } catch (e) {
-      if (e is DioException) {
-        // If DioError, it means an HTTP error occurred
-        if (e.response != null) {
-          // There is a response with data, debugPrint it for analysis
-          debugPrint('Response data: ${e.response!.data}');
-        } else {
-          // No response available, debugPrint the error message
-          debugPrint('Error message: ${e.message}');
-        }
-        // Throw the DioError to handle it in the caller function if needed
-        rethrow;
-      } else {
-        // Other types of errors
-        debugPrint('Error: $e');
-        rethrow;
-      }
-    }
-  }
 
 }

@@ -1,12 +1,25 @@
 
-import 'error_model.dart';
+class InvalidCredentialsException implements Exception {
+  final String message;
+  InvalidCredentialsException(this.message);
 
-class ServerExceptions implements Exception {
-  final ErrorMessageModel errorMessageModel;
-  const ServerExceptions({required this.errorMessageModel});
+  @override
+  String toString() => message;
 }
 
-class LocalExceptions implements Exception {
+
+class ServerException implements Exception {
   final String message;
-  const LocalExceptions({required this.message});
+  ServerException(this.message);
+
+  @override
+  String toString() =>  message;
+}
+
+class NetworkException implements Exception {
+  final String message;
+  NetworkException(this.message);
+
+  @override
+  String toString() =>message;
 }
