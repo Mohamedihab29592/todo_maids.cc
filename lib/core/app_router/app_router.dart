@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_task/features/tasks/presenation/controller/cubit/task_event.dart';
 import '../../features/splash_screen.dart';
+import '../../features/tasks/presenation/controller/cubit/task_bloc.dart';
 import '../di/service_locator.dart' as di;
 
 import '../../features/auth/presenation/controller/login_cubit/cubit/login_cubit.dart';
 import '../../features/auth/presenation/screens/login.dart';
 import '../../features/tasks/presenation/screens/layout.dart';
+import '../di/service_locator.dart';
 
 class AppRouter {
   static const String kMain = '/';
   static const String kLogin = '/login';
   static const String kLayout = '/layout';
-
-
 }
 
- final route = GoRouter(
+final route = GoRouter(
   initialLocation: AppRouter.kMain,
-  errorPageBuilder: (context, state) => const MaterialPage(child: Scaffold(body: Text('Not Found'))),
+  errorPageBuilder: (context, state) =>
+      const MaterialPage(child: Scaffold(body: Text('Not Found'))),
   routes: [
     GoRoute(
       path: AppRouter.kMain,
@@ -27,13 +29,17 @@ class AppRouter {
     GoRoute(
         path: AppRouter.kLogin,
         builder: (context, state) => BlocProvider(
-          create: (context) => di.sl<LoginCubit>(),
-          child: const LoginScreen(),
-        )),
-
+              create: (context) => di.sl<LoginCubit>(),
+              child: const LoginScreen(),
+            )),
     GoRoute(
       path: AppRouter.kLayout,
-      builder: (context, state) => const LayoutScreen(),
-    ),
+      builder: (context, state) => BlocProvider(
+        create: (context) => sl<TaskBloc>()
+          ..add(FetchAllTasksEvent())
+          ..add(FetchOwnTasksEvent()),
+        child: const LayoutScreen(),
+      ),
+    )
   ],
 );

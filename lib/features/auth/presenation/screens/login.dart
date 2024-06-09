@@ -5,9 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_task/core/utilies/assets.dart';
 import 'package:todo_task/core/utilies/strings.dart';
 import '../../../../core/app_router/app_router.dart';
+import '../../../../core/components/dialog.dart';
 import '../controller/login_cubit/cubit/login_cubit.dart';
 import '../controller/login_cubit/state/login_state.dart';
-import '../widgets/button.dart';
+import '../../../../core/components/button.dart';
 import '../widgets/form_field.dart';
 import '../widgets/loading_manager.dart';
 
@@ -36,21 +37,9 @@ class LoginScreenState extends State<LoginScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Login Error'),
-                    content: Text(state.error),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
+                  return ShowDialogError(title:AppStrings.loginError, subTitle: state.error,  );
                 },
-              );
-            }
+              );            }
           },
           builder: (context, state) {
             return LoadingManager(
