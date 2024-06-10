@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_task/core/app_router/app_router.dart';
 import 'package:todo_task/core/network/dio.dart';
 import 'package:todo_task/core/utilies/strings.dart';
-import 'bloc_observe.dart';
 import 'core/di/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   sl<DioHelper>();
-  cacheHelper.clearTodos(AppStrings.allTodosKey);
-  cacheHelper.clearTodos(AppStrings.ownTodosKey);
-  Bloc.observer = Observe();
   runApp(const MyApp());
 }
 
