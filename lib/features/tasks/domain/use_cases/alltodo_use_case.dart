@@ -6,15 +6,15 @@ import '../../../../core/error/exceptions.dart';
 import '../repositories/base_alltodo_repository.dart';
 
 class AllTodoUseCase implements BaseUseCase<List<TodoEntity>, AllTodoParameters> {
-  final BaseAllTodoRepository allTodoRepository;
+  final BaseTodoRepository allTodoRepository;
 
   AllTodoUseCase({required this.allTodoRepository});
 
   @override
-  Future<Either<ServerException, List<TodoEntity>>> call(AllTodoParameters parameters) async {
+  Future<Either<ServerException, List<TodoEntity>>> call(AllTodoParameters? parameters) async {
     try {
       final result = await allTodoRepository.getAllTodo(
-        limit: parameters.limit,
+        limit: parameters!.limit,
         skip: parameters.skip,
       );
       return result;

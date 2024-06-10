@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:todo_task/core/app_router/app_router.dart';
 import '../../../../core/components/button.dart';
-import '../../../../core/di/service_locator.dart';
 import '../../../../core/utilies/enum.dart';
 import '../../../../core/utilies/strings.dart';
 import '../../../../core/components/divider.dart';
-import '../../../../core/utilies/toast.dart';
-import '../controller/cubit/task_bloc.dart';
+import '../../../../core/components/toast.dart';
+import '../controller/bloc/task/task_bloc.dart';
 import '../widgets/tasks_widget.dart';
 
 class LayoutScreen extends StatelessWidget {
@@ -70,7 +71,9 @@ class LayoutScreen extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: PublicButton(
                     backgroundColor: Colors.blue,
-                    function: () {},
+                    function: () {
+                      GoRouter.of(context).push(AppRouter.kAdd);
+                    },
                     text: 'Add Task',
                   ),
                 ),

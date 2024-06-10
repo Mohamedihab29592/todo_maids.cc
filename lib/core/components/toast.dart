@@ -15,13 +15,16 @@ void showToast({
       fontSize: 16.0);
 }
 
-enum ToastStates { error }
+enum ToastStates { error,success }
 
 Color? chooseToastColor(ToastStates state) {
   Color? color;
   switch (state) {
     case ToastStates.error:
       color = Colors.red;
+      break;
+    case ToastStates.success:
+      color = Colors.green;
       break;
   }
   return color;

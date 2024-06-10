@@ -9,6 +9,7 @@ import '../../model/user_model.dart';
 abstract class BaseLoginRemoteDataSource {
   Future<Unit> login({required UserLoginEntity userLoginEntity});
 }
+final cacheHelper = sl<CacheHelper>();
 
 class LoginRemoteDataSource implements BaseLoginRemoteDataSource {
   @override
@@ -22,10 +23,14 @@ class LoginRemoteDataSource implements BaseLoginRemoteDataSource {
       url: AppConstants.login,
       data: body,
     );
-    final dioResponse = UserModel.fromJson(response.data);
-    var token = dioResponse.token;
-    final cacheHelper = sl<CacheHelper>();
+
+    final userResponse = UserModel.fromJson(response.data);
+    var token = userResponse.token;
+    var userId = userResponse.id;
+
     await cacheHelper.writeToken(token);
+
+    await cacheHelper.writeUserId(userId);
 
     return unit;
   }

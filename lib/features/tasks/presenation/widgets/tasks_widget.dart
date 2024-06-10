@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo_task/features/tasks/domain/entities/todo_entity.dart';
-import '../controller/cubit/task_bloc.dart';
-import '../controller/cubit/task_event.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/helper/cache_helper.dart';
+import '../../../../core/utilies/strings.dart';
+import '../controller/bloc/task/task_bloc.dart';
+import '../controller/bloc/task/task_event.dart';
+
 import 'primary_task_item.dart';
 
 
@@ -26,6 +30,9 @@ class TasksWidgetState extends State<TasksWidget> {
   @override
   void initState() {
     super.initState();
+    var cacheHelper = sl<CacheHelper>();
+    cacheHelper.clearTodos(AppStrings.allTodosKey);
+    cacheHelper.clearTodos(AppStrings.ownTodosKey);
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }

@@ -1,8 +1,10 @@
 class AppStrings {
   static String todoName = "Todo Tasks";
   static String token = "token";
+  static String userId = "userId";
   static String allTodosKey = "allTodo";
   static String ownTodosKey = "ownTodo";
+  static String ownAddTodosKey = "ownAddTodo";
 
   //login Strings
   static String login = 'Login';

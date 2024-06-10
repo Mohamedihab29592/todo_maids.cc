@@ -42,6 +42,7 @@ class LoginScreenState extends State<LoginScreen> {
               );            }
           },
           builder: (context, state) {
+
             return LoadingManager(
               color: Colors.white,
               isLoading: state is LoginLoadingState,
@@ -78,7 +79,6 @@ class LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 MyFormField(
-                                  textCapitalization: TextCapitalization.none,
                                   maxLines: 1,
                                   controller: _usernameController,
                                   type: TextInputType.text,
@@ -94,7 +94,6 @@ class LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(height: 15),
                                 MyFormField(
                                   maxLines: 1,
-                                  textCapitalization: TextCapitalization.none,
                                   suffixIcon: LoginCubit.of(context).suffix,
                                   isPassword:
                                       LoginCubit.of(context).isPasswordVisible,

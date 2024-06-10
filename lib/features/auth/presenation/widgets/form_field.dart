@@ -11,7 +11,6 @@ class MyFormField extends StatelessWidget {
   final VoidCallback? suffixIconPressed;
   final IconData? suffixIcon;
   final Widget? widget;
-  final TextCapitalization ? textCapitalization;
   final TextEditingController? controller;
   final dynamic validation;
   final bool isPassword;
@@ -20,7 +19,6 @@ class MyFormField extends StatelessWidget {
       {super.key,
         this.isPassword = false,
         this.radius = 15,
-        this.textCapitalization,
         required this.type,
         required this.hint,
         required this.maxLines,
@@ -81,7 +79,6 @@ class MyFormField extends StatelessWidget {
                   : null,
             ),
             validator: validation,
-            textCapitalization: textCapitalization!,
           ),
         ),
       ],

@@ -1,20 +1,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:todo_task/features/tasks/domain/entities/todo_entity.dart';
+
 import '../../../../core/base_use_cases/base_use_case.dart';
 import '../../../../core/error/exceptions.dart';
 import '../repositories/base_alltodo_repository.dart';
 
-class OwnTasksUseCase implements BaseUseCase<List<TodoEntity>, OwnTodoParameters> {
-  final BaseTodoRepository ownTodoRepository;
+class AddTodoUseCase implements BaseUseCase<TodoEntity, AddTodoParameters> {
+  final BaseTodoRepository addTodoTasksRepo;
 
-  OwnTasksUseCase({required this.ownTodoRepository});
+  AddTodoUseCase({required this.addTodoTasksRepo});
 
   @override
-  Future<Either<ServerException, List<TodoEntity>>> call(OwnTodoParameters parameters) async {
+  Future<Either<ServerException, TodoEntity>> call(AddTodoParameters parameters) async {
     try {
-      final result = await ownTodoRepository.getOwnTodo(
-        userId: parameters.userId
-      );
+      final result = await addTodoTasksRepo.addTodo(todo: parameters.todo, completed: parameters.completed, userId: parameters.userId);
       return result;
     } catch (e) {
       return Left(ServerException(e.toString()));

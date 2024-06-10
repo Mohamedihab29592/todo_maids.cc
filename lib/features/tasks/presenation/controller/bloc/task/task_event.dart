@@ -12,7 +12,10 @@ class FetchAllTasksEvent extends TaskEvent {
 
 }
 
-class FetchOwnTasksEvent extends TaskEvent{}
+class FetchOwnTasksEvent extends TaskEvent{
+  final int userId;
+  const FetchOwnTasksEvent({required this.userId});
+}
 
 class FetchNextPageEvent extends TaskEvent {
 

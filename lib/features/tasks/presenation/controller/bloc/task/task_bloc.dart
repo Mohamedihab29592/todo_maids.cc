@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_task/features/tasks/domain/entities/todo_entity.dart';
-import 'package:todo_task/features/tasks/presenation/controller/cubit/task_event.dart';
-import '../../../../../core/base_use_cases/base_use_case.dart';
-import '../../../../../core/utilies/enum.dart';
-import '../../../domain/use_cases/alltodo_use_case.dart';
-import '../../../domain/use_cases/own_tasks_usecase.dart';
+import 'package:todo_task/features/tasks/presenation/controller/bloc/task/task_event.dart';
+import '../../../../../../core/base_use_cases/base_use_case.dart';
+import '../../../../../../core/utilies/enum.dart';
+import '../../../../domain/use_cases/alltodo_use_case.dart';
+import '../../../../domain/use_cases/own_tasks_usecase.dart';
 import 'dart:async';
 part 'task_state.dart';
 
@@ -44,25 +44,26 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   FutureOr<void> _mapFetchOwnTasksEventToState(FetchOwnTasksEvent event, Emitter<TaskState> emit) async {
-    final result = await ownTasksUseCase.call(OwnTodoParameters(userId: 1));
+    final result = await ownTasksUseCase.call(OwnTodoParameters(userId: event.userId));
+
     result.fold(
-            (l) =>emit(state.copyWith(
-            ownTodoStates: RequestState.error, ownTodoMessage: l.message)),
+            (l) => emit(state.copyWith(
+            ownTodoStates: RequestState.error,
+            ownTodoMessage: l.message
+        )),
             (r) {
-              final completedTasks = r.where((task) => task.completed).toList();
-              final unCompletedTasks = r.where((task) => !task.completed).toList();
+          final completedTasks = r.where((task) => task.completed).toList();
+          final unCompletedTasks = r.where((task) => !task.completed).toList();
 
-              emit(state.copyWith(
-                ownTodoTasks: r,
-                completedTodoTasks: completedTasks,
-                unCompletedTodoTasks: unCompletedTasks,
-                ownTodoStates: RequestState.loaded,
-              ));
-            }
-            );
-  }
-  FutureOr<void> _mapFetchNextPageEventToState(FetchNextPageEvent event, Emitter<TaskState> emit) async {
-
+          emit(state.copyWith(
+            ownTodoTasks: r,
+            completedTodoTasks: completedTasks,
+            unCompletedTodoTasks: unCompletedTasks,
+            ownTodoStates: RequestState.loaded,
+          ));
+        }
+    );
+  }  FutureOr<void> _mapFetchNextPageEventToState(FetchNextPageEvent event, Emitter<TaskState> emit) async {
     emit(state.copyWith(isFetchingMore: true));
 
     final result = await allTodoUseCase.call(AllTodoParameters(limit: limit, skip: totalFetchedItems));
@@ -87,8 +88,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
   }
 
-  Future<void> retryFetch() async{
-    add( FetchAllTasksEvent());
-    add( FetchOwnTasksEvent());
-  }
+
+
 }

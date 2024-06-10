@@ -7,6 +7,7 @@ class TodoModel extends TodoEntity {
     required super.todo,
     required super.completed,
     required super.userId,
+    required super.isDeleted,
   });
 
   // Factory constructor to create a TodoModel from JSON
@@ -16,6 +17,7 @@ class TodoModel extends TodoEntity {
       todo: json['todo'],
       completed: json['completed'],
       userId: json['userId'],
+      isDeleted: json['isDeleted']??false
     );
   }
 

@@ -9,4 +9,10 @@ class AppConstants {
   static String ownTodoUrl({required int userId}) {
     return '${baseUrl}todos/user/$userId';
   }
+
+  static String editDeleteTodoUrl({required int todoId}) {
+    return '${baseUrl}todos/$todoId';
+  }
+
+  static String addTodoUrl = '${baseUrl}todos/add';
 }

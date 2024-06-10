@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../features/tasks/domain/entities/todo_entity.dart';
 import '../error/exceptions.dart';
 
 
@@ -29,6 +27,30 @@ class OwnTodoParameters {
 
   OwnTodoParameters({required this.userId});
 }
+
+class AddTodoParameters {
+  final String todo;
+  final bool completed ;
+ final int  userId;
+
+
+  AddTodoParameters({required this.userId,required this.todo,required this.completed, });
+}
+
+class DeleteTodoParameters {
+  final int todoId;
+
+
+  DeleteTodoParameters({required this.todoId});
+}
+
+class UpdateTodoParameters {
+  final int todoId;
+  final bool completed;
+
+  UpdateTodoParameters({required this.todoId, required this.completed});
+}
+
 abstract class NoParameter<T> {
   Future<Either<ServerException, T>> call();
 }

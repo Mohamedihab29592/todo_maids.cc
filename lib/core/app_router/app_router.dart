@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todo_task/features/tasks/presenation/controller/cubit/task_event.dart';
+import 'package:todo_task/core/helper/cache_helper.dart';
+import 'package:todo_task/features/tasks/presenation/controller/bloc/task_manager/manager_cubit.dart';
 import '../../features/splash_screen.dart';
-import '../../features/tasks/presenation/controller/cubit/task_bloc.dart';
+import '../../features/tasks/presenation/controller/bloc/task/task_bloc.dart';
+import '../../features/tasks/presenation/controller/bloc/task/task_event.dart';
+import '../../features/tasks/presenation/screens/add_screen.dart';
 import '../di/service_locator.dart' as di;
 
 import '../../features/auth/presenation/controller/login_cubit/cubit/login_cubit.dart';
@@ -15,8 +18,10 @@ class AppRouter {
   static const String kMain = '/';
   static const String kLogin = '/login';
   static const String kLayout = '/layout';
+  static const String kAdd = '/add';
 }
 
+final cacheHelper = sl<CacheHelper>();
 final route = GoRouter(
   initialLocation: AppRouter.kMain,
   errorPageBuilder: (context, state) =>
@@ -33,13 +38,47 @@ final route = GoRouter(
               child: const LoginScreen(),
             )),
     GoRoute(
-      path: AppRouter.kLayout,
-      builder: (context, state) => BlocProvider(
-        create: (context) => sl<TaskBloc>()
-          ..add(FetchAllTasksEvent())
-          ..add(FetchOwnTasksEvent()),
-        child: const LayoutScreen(),
-      ),
+        path: AppRouter.kLayout,
+        builder: (context, state) {
+          return FutureBuilder<int?>(
+            future: cacheHelper.readUserId(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator.adaptive(); // or any loading indicator
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                var userId = snapshot.data!;
+                return BlocProvider(
+                  create: (context) => sl<TaskBloc>()
+                    ..add(FetchAllTasksEvent())
+                    ..add(FetchOwnTasksEvent(userId: userId)),
+                  child: const LayoutScreen(),
+                );
+              }
+            },
+          );
+        }),
+    GoRoute(
+      path: AppRouter.kAdd,
+      builder: (context, state) {
+        return FutureBuilder<int?>(
+          future: cacheHelper.readUserId(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator.adaptive();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              var userId = snapshot.data!;
+              return BlocProvider(
+                create: (context) => di.sl<ManagerCubit>(),
+                child: AddScreen(userId: userId),
+              );
+            }
+          },
+        );
+      },
     )
   ],
 );
