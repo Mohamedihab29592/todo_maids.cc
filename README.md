@@ -1,6 +1,6 @@
 # todo_task
 
-## Project Structure
+Project Structure
 ## This project follows the MVVM (Model-View-ViewModel) architecture. Here’s a quick overview of the structure:
 
 # lib
