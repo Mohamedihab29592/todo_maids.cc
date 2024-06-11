@@ -32,3 +32,10 @@ State Management: Implemented using a Flutter state management solution (Bloc, C
 # Test
  Bloc Unit Test
  Repo Unit Test
+
+
+# APK
+https://drive.google.com/file/d/1ZNtE6IzbzzzMKJmh5NvkptnO2dKWIB1A/view?usp=sharing
+
+# Video
+https://drive.google.com/file/d/1aBEs9cF0zlo_KDFe73ncRhyzBbnaFSit/view?usp=sharing
