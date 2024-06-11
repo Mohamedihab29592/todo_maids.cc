@@ -30,9 +30,11 @@ Task Management: CRUD operations for tasks.
 State Management: Implemented using a Flutter state management solution (Bloc, Cubit).
 
 # Test
- Bloc Unit Test
- Repo Unit Test
-
+ Bloc Unit Test - Repo Unit Test
+ 
+# Challenges 
+Pagination 
+simulating data in add update and delete.
 
 # APK
 https://drive.google.com/file/d/1DbKhIHc2uIRxvXi1FR7A-88HLHijNdkH/view?usp=sharing
