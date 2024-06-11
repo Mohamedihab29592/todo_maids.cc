@@ -23,46 +23,39 @@ class TodoDataSource implements BaseTodoRemoteDataSource {
     required int limit,
     required int skip,
   }) async {
-    final response = await DioHelper.getData(
-      url: AppConstants.allTodoUrl(limit: limit, skip: skip),
-    );
-    final allTodos = (response.data['todos'] as List)
-        .map((todoJson) => TodoModel.fromJson(todoJson))
-        .toList();
-
-    if (skip == 0) {
-      await cacheHelper.writeTodos(AppStrings.allTodosKey, allTodos);
+    List<TodoEntity> cachedTodos = await cacheHelper.readTodos(AppStrings.allTodosKey) ?? [];
+    if (cachedTodos.isNotEmpty) {
+      return cachedTodos;
     } else {
-      await cacheHelper.appendTodos(AppStrings.allTodosKey, allTodos);
+      final response = await DioHelper.getData(
+        url: AppConstants.allTodoUrl(limit: limit, skip: skip),
+      );
+      final allTodos = (response.data['todos'] as List)
+          .map((todoJson) => TodoModel.fromJson(todoJson))
+          .toList();
+      await cacheHelper.writeTodos(AppStrings.allTodosKey, allTodos);
+      return allTodos;
     }
-    if (skip == 0) {
-      return await cacheHelper.readTodos(AppStrings.allTodosKey) ?? [];
-    }
-    return allTodos;
   }
 
   @override
   Future<List<TodoEntity>> getOwnTodo({
     required int userId,
   }) async {
-    final response = await DioHelper.getData(
-      url: AppConstants.ownTodoUrl(userId: userId),
-    );
-
-    final ownTodos = (response.data['todos'] as List)
-        .map((todoJson) => TodoModel.fromJson(todoJson))
-        .toList();
-
-    await cacheHelper.writeTodos(AppStrings.ownTodosKey, ownTodos);
-    if (await cacheHelper.hasTodos(AppStrings.ownTodosKey)) {
-      final cachedTodos = await cacheHelper.readTodos(AppStrings.ownTodosKey);
-      if (cachedTodos != null) {
-        return cachedTodos;
-      }
+    List<TodoEntity> cachedTodos = await cacheHelper.readTodos(AppStrings.ownTodosKey) ?? [];
+    if (cachedTodos.isNotEmpty) {
+      return cachedTodos;
+    } else {
+      final response = await DioHelper.getData(
+        url: AppConstants.ownTodoUrl(userId: userId),
+      );
+      final ownTodos = (response.data['todos'] as List)
+          .map((todoJson) => TodoModel.fromJson(todoJson))
+          .toList();
+      await cacheHelper.writeTodos(AppStrings.ownTodosKey, ownTodos);
+      return ownTodos;
     }
-    return ownTodos;
   }
-
   @override
   Future<TodoEntity> updateTodo({required int todoId,required bool completed}) async {
 

@@ -19,27 +19,13 @@ class AddTaskErrorState extends ManagerStates{
   AddTaskErrorState(this.error);
 }
 
-class UpdateLoadingState extends ManagerStates{}
-class UpdateSuccessState extends ManagerStates {
-  final TodoEntity task;
-  UpdateSuccessState({required this.task});
-
-}
-class UpdateErrorState extends ManagerStates{
-  final String error;
-  UpdateErrorState(this.error);
-}
 
 
 
-class DeleteLoadingState extends ManagerStates{}
-class DeleteSuccessState extends ManagerStates {
 
-}
-class DeleteErrorState extends ManagerStates{
-  final String error;
-  DeleteErrorState(this.error);
-}
+
+
+
 
 
 

@@ -20,3 +20,22 @@ class FetchOwnTasksEvent extends TaskEvent{
 class FetchNextPageEvent extends TaskEvent {
 
 }
+
+class DeleteTaskEvent extends TaskEvent {
+
+  final int todoId;
+
+  const DeleteTaskEvent({required this.todoId});
+
+  @override
+  List<Object?> get props => [todoId];
+}
+class UpdateTaskEvent extends TaskEvent {
+  final int todoId;
+  final bool completed;
+
+  const UpdateTaskEvent({required this.todoId, required this.completed});
+
+  @override
+  List<Object?> get props => [todoId];
+}

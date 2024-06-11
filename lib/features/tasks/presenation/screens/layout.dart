@@ -18,7 +18,7 @@ class LayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.only(top: 30.0),
@@ -33,8 +33,7 @@ class LayoutScreen extends StatelessWidget {
                 tabs: [
                   Tab(text: AppStrings.allTasks),
                   Tab(text: AppStrings.ownTasks),
-                  Tab(text: AppStrings.completed),
-                  Tab(text: AppStrings.unCompleted),
+
                 ],
               ),
               const MyDivider(),
@@ -58,8 +57,7 @@ class LayoutScreen extends StatelessWidget {
                       children: [
                         TasksWidget(tasks: state.allTodoTasks, taskBloc: bloc),
                         TasksWidget(tasks: state.ownTodoTasks, taskBloc: bloc),
-                        TasksWidget(tasks: state.completedTodoTasks, taskBloc: bloc),
-                        TasksWidget(tasks: state.unCompletedTodoTasks, taskBloc: bloc),
+
                       ],
                     );
                   },
@@ -74,7 +72,7 @@ class LayoutScreen extends StatelessWidget {
                     function: () {
                       GoRouter.of(context).push(AppRouter.kAdd);
                     },
-                    text: 'Add Task',
+                    text: AppStrings.addTask,
                   ),
                 ),
               ),

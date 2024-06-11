@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo_task/features/tasks/domain/entities/todo_entity.dart';
-import '../../../../core/di/service_locator.dart';
-import '../../../../core/helper/cache_helper.dart';
+import '../../../../core/app_router/app_router.dart';
 import '../../../../core/utilies/strings.dart';
 import '../controller/bloc/task/task_bloc.dart';
 import '../controller/bloc/task/task_event.dart';
-
 import 'primary_task_item.dart';
 
 
@@ -30,7 +28,6 @@ class TasksWidgetState extends State<TasksWidget> {
   @override
   void initState() {
     super.initState();
-    var cacheHelper = sl<CacheHelper>();
     cacheHelper.clearTodos(AppStrings.allTodosKey);
     cacheHelper.clearTodos(AppStrings.ownTodosKey);
     _scrollController = ScrollController();
@@ -48,7 +45,9 @@ class TasksWidgetState extends State<TasksWidget> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
 
-    if (currentScroll >= maxScroll && !widget.taskBloc.state.isFetchingMore) {
+    if (currentScroll >= maxScroll &&
+        !widget.taskBloc.state.isFetchingMore &&
+        !widget.taskBloc.state.hasReachedMax) {
       widget.taskBloc.add(FetchNextPageEvent());
     }
   }
@@ -57,8 +56,8 @@ class TasksWidgetState extends State<TasksWidget> {
   Widget build(BuildContext context) {
     return widget.tasks.isNotEmpty
         ? Padding(
-      padding: const EdgeInsets.all(15),
-      child: ListView.builder(
+              padding: const EdgeInsets.all(15),
+              child: ListView.builder(
         controller: _scrollController,
         itemCount: widget.tasks.length + (widget.taskBloc.state.isFetchingMore ? 1 : 0), // Add 1 for loading indicator
         itemBuilder: (context, index) {
@@ -75,20 +74,20 @@ class TasksWidgetState extends State<TasksWidget> {
             task: widget.tasks[index],
           );
         },
-      ),
-    )
-        : const Center(
+              ),
+            )
+        :  Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.edit,
             size: 50,
             color: Colors.grey,
           ),
           Text(
-            'No Tasks',
-            style: TextStyle(
+            AppStrings.noTasks,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.grey,

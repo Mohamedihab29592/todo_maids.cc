@@ -7,12 +7,12 @@ import '../../features/splash_screen.dart';
 import '../../features/tasks/presenation/controller/bloc/task/task_bloc.dart';
 import '../../features/tasks/presenation/controller/bloc/task/task_event.dart';
 import '../../features/tasks/presenation/screens/add_screen.dart';
-import '../di/service_locator.dart' as di;
+import '../di/service_locator.dart';
 
 import '../../features/auth/presenation/controller/login_cubit/cubit/login_cubit.dart';
 import '../../features/auth/presenation/screens/login.dart';
 import '../../features/tasks/presenation/screens/layout.dart';
-import '../di/service_locator.dart';
+import '../helper/user_id.dart';
 
 class AppRouter {
   static const String kMain = '/';
@@ -34,51 +34,45 @@ final route = GoRouter(
     GoRoute(
         path: AppRouter.kLogin,
         builder: (context, state) => BlocProvider(
-              create: (context) => di.sl<LoginCubit>(),
+              create: (context) => sl<LoginCubit>(),
               child: const LoginScreen(),
             )),
     GoRoute(
-        path: AppRouter.kLayout,
-        builder: (context, state) {
-          return FutureBuilder<int?>(
-            future: cacheHelper.readUserId(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator.adaptive(); // or any loading indicator
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                var userId = snapshot.data!;
-                return BlocProvider(
-                  create: (context) => sl<TaskBloc>()
-                    ..add(FetchAllTasksEvent())
-                    ..add(FetchOwnTasksEvent(userId: userId)),
-                  child: const LayoutScreen(),
-                );
-              }
-            },
-          );
-        }),
-    GoRoute(
-      path: AppRouter.kAdd,
+      path: AppRouter.kLayout,
       builder: (context, state) {
-        return FutureBuilder<int?>(
-          future: cacheHelper.readUserId(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+        return BlocBuilder<UserBloc, int?>(
+          builder: (context, userId) {
+            if (userId == null) {
               return const CircularProgressIndicator.adaptive();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              var userId = snapshot.data!;
-              return BlocProvider(
-                create: (context) => di.sl<ManagerCubit>(),
-                child: AddScreen(userId: userId),
-              );
             }
+
+            return BlocProvider(
+              create: (context) => sl<TaskBloc>()
+                ..add(FetchAllTasksEvent())
+                ..add(FetchOwnTasksEvent(userId: userId)),
+              child: const LayoutScreen(),
+            );
           },
         );
       },
-    )
+    ),
+    GoRoute(
+      path: AppRouter.kAdd,
+      builder: (context, state) {
+        return BlocBuilder<UserBloc, int?>(
+          builder: (context, userId) {
+            if (userId == null) {
+              return const CircularProgressIndicator.adaptive();
+            }
+
+            return BlocProvider(
+              create: (context) => sl<ManagerCubit>(),
+              child: AddScreen(userId: userId),
+            );
+          },
+        );
+      },
+    ),
+
   ],
 );

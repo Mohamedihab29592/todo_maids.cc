@@ -42,7 +42,7 @@ class DioHelper {
         case 404:
           throw ServerException(AppStrings.errorResource);
         case 429:
-          throw ServerException(AppStrings.errorResource);
+          throw ServerException(AppStrings.errorServer);
         case 500:
           throw ServerException(AppStrings.errorInternal);
         default:

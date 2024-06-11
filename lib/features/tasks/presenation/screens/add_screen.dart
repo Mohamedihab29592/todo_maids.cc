@@ -48,7 +48,7 @@ class AddScreenState extends State<AddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Task'),
+        title:  Text(AppStrings.addTask),
       ),
       body: BlocListener<ManagerCubit, ManagerStates>(
         listener: (context, state) {
@@ -57,7 +57,7 @@ class AddScreenState extends State<AddScreen> {
               isLoading = true;
             });
           } else if (state is AddTaskSuccessState) {
-            showToast(text: "Task added", state: ToastStates.success);
+            showToast(text: AppStrings.taskAdded, state: ToastStates.success);
             setState(() {
               isLoading = false;
               task = state.task;
@@ -82,12 +82,12 @@ class AddScreenState extends State<AddScreen> {
               children: [
                 MyFormField(
                   controller: todoController,
-                  hint: 'Enter task name',
+                  hint: AppStrings.taskName,
                   type: TextInputType.text,
                   maxLines: 1,
                   validation: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter task name';
+                      return AppStrings.enterTaskNAme;
                     }
                     return null;
                   },
@@ -103,7 +103,7 @@ class AddScreenState extends State<AddScreen> {
                         });
                       },
                     ),
-                    const Text('Completed'),
+                     Text(AppStrings.completed),
                   ],
                 ),
                 Padding(
@@ -121,14 +121,14 @@ class AddScreenState extends State<AddScreen> {
                           );
                         }
                       },
-                      text: 'Add Task',
+                      text: AppStrings.addTask,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Task',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                 Text(
+                  AppStrings.task,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 if (task != null) ...[
@@ -146,7 +146,7 @@ class AddScreenState extends State<AddScreen> {
                     ),
                   ),
                 ] else ...[
-                  const Text('No task available'),
+                   Text(AppStrings.noTasks),
                 ],
               ],
             ),
@@ -158,14 +158,14 @@ class AddScreenState extends State<AddScreen> {
 
   bool _validate() {
     if (todoController.text.isEmpty) {
-      showToast(text: 'Task name cannot be empty', state: ToastStates.error);
+      showToast(text: AppStrings.emptyTask, state: ToastStates.error);
       return false;
     }
     return true;
   }
 
   Future<void> _cacheTask(TodoEntity task) async {
-    await cacheHelper.writeAddTodos('ownAddTodosKey', [task]);
+    await cacheHelper.writeAddTodos(AppStrings.ownAddTodosKey, [task]);
   }
 
 

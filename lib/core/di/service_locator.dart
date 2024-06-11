@@ -64,6 +64,6 @@ void setupLocator() {
   // Register Cubit
   sl.registerFactory(() => LoginCubit(sl()));
 
-  sl.registerFactory(() => TaskBloc(sl(), sl()));
-  sl.registerFactory(() => ManagerCubit(sl(), sl(),sl()));
+  sl.registerFactory(() => TaskBloc(sl(), sl(),sl(),sl()));
+  sl.registerFactory(() => ManagerCubit(sl(),));
 }

@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_task/core/utilies/assets.dart';
 import 'package:todo_task/core/utilies/strings.dart';
 import '../../../../core/app_router/app_router.dart';
-import '../../../../core/components/dialog.dart';
+import '../../../../core/components/error_dialog.dart';
 import '../controller/login_cubit/cubit/login_cubit.dart';
 import '../controller/login_cubit/state/login_state.dart';
 import '../../../../core/components/button.dart';
