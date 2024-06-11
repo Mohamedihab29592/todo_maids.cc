@@ -1,21 +1,39 @@
-Project Structure:
-The project follows the MVVM (Model-View-ViewModel) architecture.
-It consists of three main layers: lib, data, domain, and presentation.
-Data Layer:
-Responsible for data management, including repositories, data sources, and models.
-Domain Layer:
-Encapsulates the business logic of the application, including use cases and entities.
-Presentation Layer:
-Handles UI and state management, including view models and Flutter widgets.
-Features:
-Authentication: User login and registration functionality.
-Task Management: CRUD (Create, Read, Update, Delete) operations for tasks.
-State Management: Implemented using a Flutter state management solution such as Bloc or Cubit.
-Test:
-The project includes unit tests for both the Bloc and Repository.
-Challenges:
-Pagination: Handling data pagination, likely for displaying a large number of tasks.
-Simulating data in add, update, and delete operations: Presumably, this refers to testing scenarios that involve manipulating task data.
+## todo_task
+# Project Structure
+This project follows the MVVM (Model-View-ViewModel) architecture. Here’s a quick overview of the structure:
 
-# APK
+lib
+data: Manages data retrieval, storage, and APIs.
+domain: Contains business logic and entity models.
+presentation: Handles UI and state management.
+Data Layer
+Responsible for data management, including:
+
+Repositories: Interfaces for data access.
+Data Sources: Concrete implementations for data access (e.g., APIs, local databases).
+Models: Data models for serialization and deserialization.
+Domain Layer
+Encapsulates business logic, including:
+
+Use Cases: Classes that represent application-specific business rules.
+Entities: Core objects used across the application.
+
+Presentation Layer
+Handles UI and state management, including:
+
+View Models: Manage UI-related data and handle user interaction.
+Widgets: Flutter widgets for rendering the user interface.
+Features
+Authentication: User login and registration.
+Task Management: CRUD operations for tasks.
+State Management: Implemented using a Flutter state management solution (Bloc, Cubit).
+
+Test
+Bloc Unit Test - Repo Unit Test
+
+Challenges
+Pagination
+simulating data in add update and delete.
+
+APK
 https://drive.google.com/file/d/1DbKhIHc2uIRxvXi1FR7A-88HLHijNdkH/view?usp=sharing
