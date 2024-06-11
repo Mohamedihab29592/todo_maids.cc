@@ -8,6 +8,7 @@ import '../model/todo_model.dart';
 
 abstract class BaseTodoRemoteDataSource {
   Future<List<TodoEntity>> getAllTodo({required int limit, required int skip});
+  Future<List<TodoEntity>> getNextPage({required int limit, required int skip});
   Future<List<TodoEntity>> getOwnTodo({required int userId});
   Future<TodoEntity> updateTodo({required int todoId,required bool completed});
   Future<TodoEntity> addTodo({required String todo, required bool completed, required int userId});
@@ -23,7 +24,8 @@ class TodoDataSource implements BaseTodoRemoteDataSource {
     required int limit,
     required int skip,
   }) async {
-    List<TodoEntity> cachedTodos = await cacheHelper.readTodos(AppStrings.allTodosKey) ?? [];
+    List<TodoEntity> cachedTodos = await cacheHelper.readTodos(
+        AppStrings.allTodosKey) ?? [];
     if (cachedTodos.isNotEmpty) {
       return cachedTodos;
     } else {
@@ -42,7 +44,8 @@ class TodoDataSource implements BaseTodoRemoteDataSource {
   Future<List<TodoEntity>> getOwnTodo({
     required int userId,
   }) async {
-    List<TodoEntity> cachedTodos = await cacheHelper.readTodos(AppStrings.ownTodosKey) ?? [];
+    List<TodoEntity> cachedTodos = await cacheHelper.readTodos(
+        AppStrings.ownTodosKey) ?? [];
     if (cachedTodos.isNotEmpty) {
       return cachedTodos;
     } else {
@@ -56,21 +59,21 @@ class TodoDataSource implements BaseTodoRemoteDataSource {
       return ownTodos;
     }
   }
-  @override
-  Future<TodoEntity> updateTodo({required int todoId,required bool completed}) async {
 
+  @override
+  Future<TodoEntity> updateTodo(
+      {required int todoId, required bool completed}) async {
     Map<String, dynamic> updatedTodoData = {
       'completed': completed,
     };
 
-    final response  = await DioHelper.putData(
-        url: AppConstants.editDeleteTodoUrl(todoId: todoId), data: updatedTodoData);
-    final  updateTodo = TodoModel.fromJson(response.data);
+    final response = await DioHelper.putData(
+        url: AppConstants.editDeleteTodoUrl(todoId: todoId),
+        data: updatedTodoData);
+    final updateTodo = TodoModel.fromJson(response.data);
 
 
     return updateTodo;
-
-
   }
 
   @override
@@ -92,7 +95,8 @@ class TodoDataSource implements BaseTodoRemoteDataSource {
 
     final addedTodo = TodoModel.fromJson(response.data);
 
-    List<TodoEntity> existingTodos = await cacheHelper.readTodos(AppStrings.ownAddTodosKey) ?? [];
+    List<TodoEntity> existingTodos = await cacheHelper.readTodos(
+        AppStrings.ownAddTodosKey) ?? [];
 
     existingTodos.add(addedTodo);
 
@@ -100,11 +104,25 @@ class TodoDataSource implements BaseTodoRemoteDataSource {
 
     return addedTodo;
   }
+
   @override
   Future<TodoEntity> deleteTodo({required int todoId}) async {
-    final response  = await DioHelper.deleteData(url: AppConstants.editDeleteTodoUrl(todoId: todoId));
+    final response = await DioHelper.deleteData(
+        url: AppConstants.editDeleteTodoUrl(todoId: todoId));
     final deletedTodo = TodoModel.fromJson(response.data);
     return deletedTodo;
+  }
 
+  @override
+  Future<List<TodoEntity>> getNextPage(
+      {required int limit, required int skip}) async {
+    final response = await DioHelper.getData(
+      url: AppConstants.allTodoUrl(limit: limit, skip: skip),
+    );
+    final nextTodo = (response.data['todos'] as List)
+        .map((todoJson) => TodoModel.fromJson(todoJson))
+        .toList();
+    await cacheHelper.writeTodos(AppStrings.allTodosKey, nextTodo);
+    return nextTodo;
   }
 }

@@ -13,6 +13,7 @@ import 'package:todo_task/features/tasks/presenation/controller/bloc/task_manage
 import '../../features/auth/domain/use_case/login_use_case.dart';
 import '../../features/auth/presenation/controller/login_cubit/cubit/login_cubit.dart';
 import '../../features/tasks/data/data_source/todo_remote_data.dart';
+import '../../features/tasks/domain/use_cases/get_next_page_usecase.dart';
 import '../../features/tasks/presenation/controller/bloc/task/task_bloc.dart';
 import '../helper/cache_helper.dart';
 import '../network/dio.dart';
@@ -59,11 +60,12 @@ void setupLocator() {
 
   sl.registerLazySingleton<UpdateTodoUseCase>(
           () => UpdateTodoUseCase(updateTodoTasksRepo: sl()));
-
+  sl.registerLazySingleton<NextTodoUseCase>(
+          () => NextTodoUseCase(nextTodoRepository: sl()));
 
   // Register Cubit
   sl.registerFactory(() => LoginCubit(sl()));
 
-  sl.registerFactory(() => TaskBloc(sl(), sl(),sl(),sl()));
+  sl.registerFactory(() => TaskBloc(sl(), sl(),sl(),sl(),sl()));
   sl.registerFactory(() => ManagerCubit(sl(),));
 }

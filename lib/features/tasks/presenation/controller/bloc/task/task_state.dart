@@ -8,14 +8,12 @@ class TaskState extends Equatable {
   final RequestState allTodoStates;
   final String allTodoMessage;
   final int currentPage;
-  final bool hasReachedMax;
   final bool isFetchingMore;
 
   final List<TodoEntity> ownTodoTasks;
   final RequestState ownTodoStates;
   final String ownTodoMessage;
 
-  // New properties for update and delete states
   final RequestState isUpdatingStates;
 
 
@@ -29,7 +27,6 @@ class TaskState extends Equatable {
     this.allTodoStates = RequestState.loading,
     this.allTodoMessage = '',
     this.currentPage = 1,
-    this.hasReachedMax = false,
     this.isFetchingMore = false,
     this.ownTodoTasks = const [],
     this.ownTodoStates = RequestState.loading,
@@ -45,7 +42,6 @@ class TaskState extends Equatable {
     RequestState? allTodoStates,
     String? allTodoMessage,
     int? currentPage,
-    bool? hasReachedMax,
     bool? isFetchingMore,
     List<TodoEntity>? ownTodoTasks,
     RequestState? ownTodoStates,
@@ -61,7 +57,6 @@ class TaskState extends Equatable {
       allTodoStates: allTodoStates ?? this.allTodoStates,
       allTodoMessage: allTodoMessage ?? this.allTodoMessage,
       currentPage: currentPage ?? this.currentPage,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       isFetchingMore: isFetchingMore ?? this.isFetchingMore,
       ownTodoTasks: ownTodoTasks ?? this.ownTodoTasks,
       ownTodoStates: ownTodoStates ?? this.ownTodoStates,
@@ -79,7 +74,7 @@ class TaskState extends Equatable {
     allTodoStates,
     allTodoMessage,
     currentPage,
-    hasReachedMax,
+
     isFetchingMore,
     ownTodoTasks,
     ownTodoStates,

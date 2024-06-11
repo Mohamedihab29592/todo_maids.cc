@@ -7,6 +7,9 @@ abstract class BaseTodoRepository {
   Future<Either<ServerException, List<TodoEntity>>> getAllTodo(
       {required int limit, required int skip});
 
+  Future<Either<ServerException, List<TodoEntity>>> getNextTodo(
+      {required int limit, required int skip});
+
   Future<Either<ServerException, List<TodoEntity>>> getOwnTodo(
       {required int userId});
 

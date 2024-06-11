@@ -43,4 +43,10 @@ class TodoRepositoryImpl implements BaseTodoRepository {
     TodoEntity tasks = await todoRemoteDataSource.updateTodo(todoId: todoId,completed: completed);
     return  Right(tasks);
   }
+
+  @override
+  Future<Either<ServerException, List<TodoEntity>>> getNextTodo({required int limit, required int skip})async {
+    List<TodoEntity> tasks = await todoRemoteDataSource.getNextPage(limit:limit ,skip:skip );
+    return  Right(tasks);
+  }
 }

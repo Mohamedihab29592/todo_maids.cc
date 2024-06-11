@@ -6,6 +6,7 @@ import '../../../../../../core/base_use_cases/base_use_case.dart';
 import '../../../../../../core/utilies/enum.dart';
 import '../../../../domain/use_cases/alltodo_use_case.dart';
 import '../../../../domain/use_cases/delete_tasks_usecase.dart';
+import '../../../../domain/use_cases/get_next_page_usecase.dart';
 import '../../../../domain/use_cases/own_tasks_usecase.dart';
 import 'dart:async';
 
@@ -15,6 +16,7 @@ part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final AllTodoUseCase allTodoUseCase;
+  final NextTodoUseCase nextTodoUseCase;
 
   final OwnTasksUseCase ownTasksUseCase;
 
@@ -23,7 +25,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   int totalFetchedItems = 10;
   final int limit = 10;
-  TaskBloc(this.allTodoUseCase, this.ownTasksUseCase, this.deleteTodoUseCase, this.updateTodoUseCase, )
+  TaskBloc(this.allTodoUseCase, this.ownTasksUseCase, this.deleteTodoUseCase, this.updateTodoUseCase, this.nextTodoUseCase, )
       : super( const TaskState()) {
     on<FetchAllTasksEvent>(_mapFetchAllTasksEventToState);
     on<FetchOwnTasksEvent>(_mapFetchOwnTasksEventToState);
@@ -72,13 +74,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _mapFetchNextPageEventToState(FetchNextPageEvent event, Emitter<TaskState> emit) async {
     emit(state.copyWith(isFetchingMore: true));
 
-    final result = await allTodoUseCase.call(AllTodoParameters(limit: limit, skip: totalFetchedItems));
+    final result = await nextTodoUseCase.call(AllTodoParameters(limit: limit, skip: totalFetchedItems));
 
     result.fold(
           (l) => emit(state.copyWith(isFetchingMore: false, allTodoStates: RequestState.error, allTodoMessage: l.message)),
           (r) {
             if (r.isEmpty) {
-              emit(state.copyWith(isFetchingMore: false, hasReachedMax: true));
+              emit(state.copyWith(isFetchingMore: false));
             } else {
               final List<TodoEntity> newTasks = r.where((task) => !state.allTodoTasks.contains(task)).toList();
               totalFetchedItems += newTasks.length;
@@ -88,7 +90,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
                 allTodoTasks: allTasks,
                 allTodoStates: RequestState.loaded,
                 isFetchingMore: false,
-                hasReachedMax: false, // Resetting the flag as there may be more tasks
               ));
             }
       },

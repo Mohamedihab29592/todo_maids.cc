@@ -5,12 +5,14 @@ import 'package:todo_task/core/utilies/enum.dart';
 import 'package:todo_task/features/tasks/domain/entities/todo_entity.dart';
 import 'package:todo_task/features/tasks/domain/use_cases/alltodo_use_case.dart';
 import 'package:todo_task/features/tasks/domain/use_cases/delete_tasks_usecase.dart';
+import 'package:todo_task/features/tasks/domain/use_cases/get_next_page_usecase.dart';
 import 'package:todo_task/features/tasks/domain/use_cases/own_tasks_usecase.dart';
 import 'package:todo_task/features/tasks/domain/use_cases/update_tasks_usecase.dart';
 import 'package:todo_task/features/tasks/presenation/controller/bloc/task/task_bloc.dart';
 import 'package:todo_task/features/tasks/presenation/controller/bloc/task/task_event.dart';
 
 class MockAllTodoUseCase extends Mock implements AllTodoUseCase {}
+class MoackNextTodoUseCase extends Mock implements NextTodoUseCase {}
 
 class MockOwnTasksUseCase extends Mock implements OwnTasksUseCase {}
 class MockUpdateTasksUseCase extends Mock implements UpdateTodoUseCase {}
@@ -19,6 +21,7 @@ class MockDeleteTasksUseCase extends Mock implements DeleteTodoUseCase {}
 void main() {
   late TaskBloc taskBloc;
   late AllTodoUseCase mockAllTodoUseCase;
+  late NextTodoUseCase mockNextTodoUseCase;
   late OwnTasksUseCase mockOwnTasksUseCase;
   late UpdateTodoUseCase mockUpdateTasksUseCase;
   late DeleteTodoUseCase mockUDeleteTasksUseCase;
@@ -26,10 +29,12 @@ void main() {
 
   setUp(() {
     mockAllTodoUseCase = MockAllTodoUseCase();
+    mockNextTodoUseCase = MoackNextTodoUseCase();
+    mockOwnTasksUseCase = MockOwnTasksUseCase();
     mockOwnTasksUseCase = MockOwnTasksUseCase();
     mockUpdateTasksUseCase = MockUpdateTasksUseCase();
     mockUDeleteTasksUseCase = MockDeleteTasksUseCase();
-    taskBloc = TaskBloc(mockAllTodoUseCase, mockOwnTasksUseCase,mockUDeleteTasksUseCase,mockUpdateTasksUseCase);
+    taskBloc = TaskBloc(mockAllTodoUseCase, mockOwnTasksUseCase,mockUDeleteTasksUseCase,mockUpdateTasksUseCase,mockNextTodoUseCase);
   });
 
   final testTodos = [

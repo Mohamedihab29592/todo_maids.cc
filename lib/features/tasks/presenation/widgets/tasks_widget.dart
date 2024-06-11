@@ -46,8 +46,7 @@ class TasksWidgetState extends State<TasksWidget> {
     final currentScroll = _scrollController.position.pixels;
 
     if (currentScroll >= maxScroll &&
-        !widget.taskBloc.state.isFetchingMore &&
-        !widget.taskBloc.state.hasReachedMax) {
+        !widget.taskBloc.state.isFetchingMore ) {
       widget.taskBloc.add(FetchNextPageEvent());
     }
   }
