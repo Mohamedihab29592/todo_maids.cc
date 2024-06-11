@@ -35,7 +35,4 @@ State Management: Implemented using a Flutter state management solution (Bloc, C
 
 
 # APK
-https://drive.google.com/file/d/1ZNtE6IzbzzzMKJmh5NvkptnO2dKWIB1A/view?usp=sharing
-
-# Video
-https://drive.google.com/file/d/1aBEs9cF0zlo_KDFe73ncRhyzBbnaFSit/view?usp=sharing
+https://drive.google.com/file/d/1DbKhIHc2uIRxvXi1FR7A-88HLHijNdkH/view?usp=sharing
