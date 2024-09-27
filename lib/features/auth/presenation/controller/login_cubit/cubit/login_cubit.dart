@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginStates> {
     final result = await _loginUseCase(userLoginEntity);
     result.fold(
           (failure) {
-        emit(LoginErrorState(failure.message));
+        emit(LoginErrorState("user Login faild"));
       },
           (_) {
         emit(LoginSuccessState());
