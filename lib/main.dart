@@ -16,9 +16,7 @@ void main() async {
   Bloc.observer = Observe();
   runApp(const MyApp());
 }
-//update
-//update
-//task1done
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
